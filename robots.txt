@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://writsop.github.io/devtoolbox/sitemap.xml
