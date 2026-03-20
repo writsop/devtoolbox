@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base64 Encoder/Decoder - Free Online Tool | DevToolBox</title>
+<meta name="description" content="Free online Base64 encoder and decoder. Convert text to Base64 or decode Base64 strings. Supports UTF-8. No signup.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0a;color:#e0e0e0;min-height:100vh}
+.container{max-width:900px;margin:0 auto;padding:1.5rem 1rem}
+nav a{color:#00d4ff;text-decoration:none;font-size:0.9rem}
+h1{font-size:1.8rem;margin:1rem 0 0.5rem;color:#fff}
+.desc{color:#888;margin-bottom:1.5rem}
+textarea{width:100%;height:200px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:8px;color:#e0e0e0;font-family:monospace;font-size:13px;padding:1rem;resize:vertical;margin-bottom:1rem}
+textarea:focus{outline:none;border-color:#00d4ff}
+.btns{display:flex;gap:0.5rem;margin-bottom:1rem}
+button{background:#1a1a2e;color:#00d4ff;border:1px solid #2a2a4a;padding:0.6rem 1.2rem;border-radius:6px;cursor:pointer;font-size:0.9rem}
+button:hover{background:#2a2a4a;border-color:#00d4ff}
+label{display:block;font-size:0.85rem;color:#888;margin-bottom:0.3rem}
+.status{margin:0.5rem 0;font-size:0.9rem}
+.error{color:#ff4444}.success{color:#44ff44}
+footer{text-align:center;margin-top:3rem;color:#555;font-size:0.85rem}
+footer a{color:#00d4ff;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="container">
+<nav><a href="/">← DevToolBox</a></nav>
+<h1>🔤 Base64 Encoder/Decoder</h1>
+<p class="desc">Encode text to Base64 or decode Base64 back to text. UTF-8 supported.</p>
+<label>Input</label>
+<textarea id="input" placeholder="Enter text to encode, or Base64 to decode..."></textarea>
+<div class="btns">
+<button onclick="encode()">🔒 Encode to Base64</button>
+<button onclick="decode()">🔓 Decode from Base64</button>
+<button onclick="navigator.clipboard.writeText(document.getElementById('output').value).then(()=>msg('Copied!','success'))">📋 Copy</button>
+<button onclick="document.getElementById('input').value='';document.getElementById('output').value=''">🗑️ Clear</button>
+</div>
+<label>Output</label>
+<textarea id="output" readonly></textarea>
+<div id="status"></div>
+<footer><p>☕ Tip: <code style="color:#00d4ff">0x6d15eE39fB46Eb439d7B19ACEd5d36A4A327eAa2</code> (ETH/Base) | <a href="/">DevToolBox</a></p></footer>
+</div>
+<script>
+function encode(){try{const t=document.getElementById('input').value;document.getElementById('output').value=btoa(unescape(encodeURIComponent(t)));msg('Encoded '+t.length+' chars','success')}catch(e){msg(e.message,'error')}}
+function decode(){try{const t=document.getElementById('input').value.trim();document.getElementById('output').value=decodeURIComponent(escape(atob(t)));msg('Decoded successfully','success')}catch(e){msg('Invalid Base64: '+e.message,'error')}}
+function msg(t,c){document.getElementById('status').innerHTML='<p class="'+c+'">'+t+'</p>'}
+</script>
+</body>
+</html>

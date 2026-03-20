@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Diff Checker - Compare Text Online Free | DevToolBox</title>
+<meta name="description" content="Compare two texts and see differences highlighted. Free online text diff checker. No signup required.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0a;color:#e0e0e0;min-height:100vh}
+.container{max-width:1100px;margin:0 auto;padding:1.5rem 1rem}
+nav a{color:#00d4ff;text-decoration:none;font-size:0.9rem}
+h1{font-size:1.8rem;margin:1rem 0 0.5rem;color:#fff}
+.desc{color:#888;margin-bottom:1.5rem}
+.editor-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+textarea{width:100%;height:250px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:8px;color:#e0e0e0;font-family:monospace;font-size:13px;padding:1rem;resize:vertical}
+textarea:focus{outline:none;border-color:#00d4ff}
+button{background:#1a1a2e;color:#00d4ff;border:1px solid #2a2a4a;padding:0.6rem 1.2rem;border-radius:6px;cursor:pointer;font-size:0.9rem;margin-bottom:1rem}
+button:hover{background:#2a2a4a;border-color:#00d4ff}
+label{display:block;font-size:0.85rem;color:#888;margin-bottom:0.3rem}
+#diff{background:#1a1a2e;border-radius:8px;padding:1rem;font-family:monospace;font-size:13px;line-height:1.6;white-space:pre-wrap;max-height:500px;overflow:auto}
+.add{background:#1a3a1a;color:#44ff44}
+.del{background:#3a1a1a;color:#ff4444}
+.same{color:#666}
+footer{text-align:center;margin-top:3rem;color:#555;font-size:0.85rem}
+footer a{color:#00d4ff;text-decoration:none}
+@media(max-width:768px){.editor-wrap{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+<nav><a href="/">← DevToolBox</a></nav>
+<h1>📝 Text Diff Checker</h1>
+<p class="desc">Compare two texts and see what changed. Additions in green, deletions in red.</p>
+<div class="editor-wrap">
+<div><label>Original Text</label><textarea id="text1" placeholder="Paste original text here..."></textarea></div>
+<div><label>Modified Text</label><textarea id="text2" placeholder="Paste modified text here..."></textarea></div>
+</div>
+<button onclick="diff()">🔍 Compare</button>
+<button onclick="document.getElementById('text1').value='';document.getElementById('text2').value='';document.getElementById('diff').innerHTML=''">🗑️ Clear</button>
+<div id="diff"></div>
+<footer><p>☕ Tip: <code style="color:#00d4ff">0x6d15eE39fB46Eb439d7B19ACEd5d36A4A327eAa2</code> (ETH/Base) | <a href="/">DevToolBox</a></p></footer>
+</div>
+<script>
+function diff(){
+const a=document.getElementById('text1').value.split('\n');
+const b=document.getElementById('text2').value.split('\n');
+const n=a.length,m=b.length;
+// Simple LCS-based diff
+const dp=Array(n+1).fill(null).map(()=>Array(m+1).fill(0));
+for(let i=1;i<=n;i++)for(let j=1;j<=m;j++)dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]+1:Math.max(dp[i-1][j],dp[i][j-1]);
+const result=[];
+let i=n,j=m;
+while(i>0||j>0){
+if(i>0&&j>0&&a[i-1]===b[j-1]){result.unshift({type:'same',text:a[i-1]});i--;j--}
+else if(j>0&&(i===0||dp[i][j-1]>=dp[i-1][j])){result.unshift({type:'add',text:b[j-1]});j--}
+else{result.unshift({type:'del',text:a[i-1]});i--}
+}
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+document.getElementById('diff').innerHTML=result.map(r=>{
+const prefix=r.type==='add'?'+ ':r.type==='del'?'- ':'  ';
+return `<div class="${r.type}">${prefix}${esc(r.text)}</div>`;
+}).join('');
+}
+</script>
+</body>
+</html>
